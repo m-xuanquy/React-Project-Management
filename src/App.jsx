@@ -26,7 +26,7 @@ function App() {
   function handleSubmit(project) {
     
     setProjects((prevProjects) => [project, ...prevProjects])
-    setIsAddingProject(false);
+    // setIsAddingProject(false);
   }
 
   function handleSelectProject(project) {
