@@ -1,38 +1,40 @@
-import { useState } from "react";
+import { useRef } from "react";
 
-export default function NewProject({ onCancel, projects, onSubmit }) {
+export default function NewProject({ onCancel, onSubmit }) {
     var curr = new Date();
-    var date = curr.toISOString().split("T")[0];
+    var defaultDate = curr.toISOString().split("T")[0];
 
-    const [addedProject, setAddedProject] = useState({
-        title: '',
-        description: '',
-        date: date,
-        tasks: []
-    })
+    const title = useRef();
+    const description = useRef();
+    const date = useRef();
 
-    function handleChange(identifier, value) {
-        setAddedProject((prev) => {
-            return {
-                ...prev,
-                [identifier]: value
-            }
+    function handleSave(event) {
+        event.preventDefault();
+
+        const enteredTitle = title.current.value;
+        const enteredDescription = description.current.value;
+        const enteredDate = date.current.value;
+
+        onSubmit({
+            title: enteredTitle,
+            description: enteredDescription,
+            date: enteredDate, 
+            tasks: []
         })
     }
 
-
     return (
-        <form className="mt-4 mx-auto" onSubmit={(event) => { onSubmit(addedProject, event) }}>
+        <form className="mt-4 mx-auto" onSubmit={(event) => { handleSave(event) }}>
             <span className="flex justify-end">
                 <button onClick={onCancel} className="px-6 py-2 rounded-md text-stone-800  hover:bg-stone-200 ">Cancel</button>
                 <button type="submit" className="px-6 py-2 rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950">Save</button>
             </span>
             <label className="text-sm font-bold uppercase text-stone-500">Title</label>
-            <input required className="w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600" value={addedProject.title} onChange={(event) => { handleChange("title", event.target.value) }} />
+            <input required ref={title} className="w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600" />
             <label className="text-sm font-bold uppercase text-stone-500">Description</label>
-            <textarea required className="w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600" value={addedProject.description} onChange={(event) => { handleChange("description", event.target.value) }} />
+            <textarea required ref={description} className="w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600" />
             <label className="text-sm font-bold uppercase text-stone-500">Due Date</label>
-            <input id="date" type="date" className="w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600" value={addedProject.date} onChange={(event) => { handleChange("date", event.target.value) }} />
+            <input id="date" ref={date} type="date" defaultValue={defaultDate} className="w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600" />
         </form>
     ); 
 }

@@ -23,8 +23,8 @@ function App() {
     }
   }
 
-  function handleSubmit(project, event) {
-    event.preventDefault();
+  function handleSubmit(project) {
+    
     setProjects((prevProjects) => [project, ...prevProjects])
     setIsAddingProject(false);
   }
@@ -40,7 +40,7 @@ function App() {
 
   var displayingScreen = <NoProject onAddProject={handleAddProject} projects={projects} />;
   if (isAddingProject) {
-    displayingScreen = <NewProject onCancel={handleCancel} projects={projects} onSubmit={handleSubmit} />;
+    displayingScreen = <NewProject onCancel={handleCancel} onSubmit={handleSubmit} />;
   }
   else if (selectedProject) {
     displayingScreen = <SelectedProject project={selectedProject} onDelete={handleDeleteProject}/>;
